@@ -22,15 +22,11 @@ function removeGrid () {
 }
 function createGrid () {
     let arr = [];
-    let numRgb = [];
     gridDimensions = Number(window.prompt("How many squares per side to make the grid?", ""));    
     for (i = 0; i < gridDimensions; i++) {
         arr[i] = (300 / gridDimensions) + "px";
         gridContainer.setAttribute('style','display: inline-grid; width: 300px; height: 300px; grid-template-columns:' + arr.join(" ") + '; grid-template-rows:' + arr.join(" "));
     }
-    numRgb[0] = Math.floor(Math.random() * 256);    
-    numRgb[1] = Math.floor(Math.random() * 256);    
-    numRgb[2] = Math.floor(Math.random() * 256);
     for (i = 0; i < gridDimensions * gridDimensions; i++) {
         grid = document.createElement('div');
         grid.classList.add('div-' + i);
@@ -39,9 +35,20 @@ function createGrid () {
         gridOverlay = document.createElement('div');
         gridOverlay.classList.add('div-overlay-' + i);
         gridOverlay.setAttribute('id', 'div-overlay-' + i);   
-        gridOverlay.setAttribute('style', 'background-color: transparent; opacity: 1.0; background:rgb(' + numRgb + ')');
+        gridOverlay.setAttribute('style', 'background-color: transparent; opacity: 1.0; background: blue');
         gridContainer.appendChild(gridOverlay);
         gridOverlay.appendChild(grid);
+        gridOverlay.addEventListener("mouseover", function () {
+            let numRgb = [];    
+            const colorBackground = 'blue';
+            if (document.getElementById(this.id).style.background == colorBackground) {
+                numRgb[0] = Math.floor(Math.random() * 256);
+                numRgb[1] = Math.floor(Math.random() * 256);
+                numRgb[2] = Math.floor(Math.random() * 256);
+                this.style.background = "rgb(" + numRgb + ")";    
+        }
+
+        });
         grid.addEventListener("mouseover", function () {
                 this.style.opacity = Number(this.style.opacity); 
                 switch (Number(this.style.opacity)) {
@@ -112,6 +119,7 @@ function main () {
     buttonContainer.setAttribute('style', 'display: flex; align-items: center; justify-content: center; margin-left: auto; margin-right: auto; padding-bottom: 30px;');
     btn.classList.add('squareButton');
     btn.id = 'squareButton';
+    btn.innerHTML = "Etch-a-sketch";
     buttonContainer.appendChild(btn);
     btn.addEventListener("click", function () {
         removeGrid();

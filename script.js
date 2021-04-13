@@ -8,7 +8,7 @@ function removeGrid () {
     if (gridDimensions == 0) {    
             createGrid();
     }
-    else if (gridDimensions > 0) {
+    else if (gridDimensions > 0 && gridDimensions <= 100) {
         for (i = 0; i < gridDimensions * gridDimensions; i++) {
             grid = document.getElementById('div-' + i); 
             gridOverlay = document.getElementById('div-overlay-' + i); 
@@ -22,34 +22,38 @@ function removeGrid () {
 }
 function createGrid () {
     let arr = [];
-    gridDimensions = Number(window.prompt("How many squares per side to make the grid?", ""));    
-    for (i = 0; i < gridDimensions; i++) {
-        arr[i] = (300 / gridDimensions) + "px";
-        gridContainer.setAttribute('style','display: inline-grid; width: 300px; height: 300px; grid-template-columns:' + arr.join(" ") + '; grid-template-rows:' + arr.join(" "));
+    gridDimensions = Number(window.prompt("How many squares per side to make the grid?", ""));   
+    if (gridDimensions > 100) {
+        gridDimensions = Number(window.prompt("How many squares per side to make the grid?", ""));
+    } 
+    if (gridDimensions <= 100) {
+        for (i = 0; i < gridDimensions; i++) {
+            arr[i] = (300 / gridDimensions) + "px";
+            gridContainer.setAttribute('style','display: inline-grid; width: 300px; height: 300px; grid-template-columns:' + arr.join(" ") + '; grid-template-rows:' + arr.join(" "));
     }
-    for (i = 0; i < gridDimensions * gridDimensions; i++) {
-        grid = document.createElement('div');
-        grid.classList.add('div-' + i);
-        grid.setAttribute('id', 'div-' + i); 
-        grid.setAttribute('style', 'opacity: 0; background-color: black; height: 100%');
-        gridOverlay = document.createElement('div');
-        gridOverlay.classList.add('div-overlay-' + i);
-        gridOverlay.setAttribute('id', 'div-overlay-' + i);   
-        gridOverlay.setAttribute('style', 'background-color: transparent; opacity: 1.0; background: blue');
-        gridContainer.appendChild(gridOverlay);
-        gridOverlay.appendChild(grid);
-        gridOverlay.addEventListener("mouseover", function () {
-            let numRgb = [];    
-            const colorBackground = 'blue';
-            if (document.getElementById(this.id).style.background == colorBackground) {
-                numRgb[0] = Math.floor(Math.random() * 256);
-                numRgb[1] = Math.floor(Math.random() * 256);
-                numRgb[2] = Math.floor(Math.random() * 256);
-                this.style.background = "rgb(" + numRgb + ")";    
-        }
+        for (i = 0; i < gridDimensions * gridDimensions; i++) {
+            grid = document.createElement('div');
+            grid.classList.add('div-' + i);
+            grid.setAttribute('id', 'div-' + i); 
+            grid.setAttribute('style', 'opacity: 0; background-color: black; height: 100%');
+            gridOverlay = document.createElement('div');
+            gridOverlay.classList.add('div-overlay-' + i);
+            gridOverlay.setAttribute('id', 'div-overlay-' + i);   
+            gridOverlay.setAttribute('style', 'background-color: transparent; opacity: 1.0; background: blue');
+            gridContainer.appendChild(gridOverlay);
+            gridOverlay.appendChild(grid);
+            gridOverlay.addEventListener("mouseover", function () {
+                let numRgb = [];    
+                const colorBackground = 'blue';
+                    if (document.getElementById(this.id).style.background == colorBackground) {
+                        numRgb[0] = Math.floor(Math.random() * 256);
+                        numRgb[1] = Math.floor(Math.random() * 256);
+                        numRgb[2] = Math.floor(Math.random() * 256);
+                        this.style.background = "rgb(" + numRgb + ")";    
+                    }
 
-        });
-        grid.addEventListener("mouseover", function () {
+            });
+            grid.addEventListener("mouseover", function () {
                 this.style.opacity = Number(this.style.opacity); 
                 switch (Number(this.style.opacity)) {
                     case 0:
@@ -111,6 +115,7 @@ function createGrid () {
         });
     }
     return gridDimensions;
+    }
 }
 
 function main () {
